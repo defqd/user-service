@@ -473,3 +473,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/UserWebAPI/UserWebAPI/LocalDatabase.db
+/UserWebAPI/UserWebAPI/LocalDatabase.db-shm
+/UserWebAPI/UserWebAPI/LocalDatabase.db-wal

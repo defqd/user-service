@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using UserWebAPI.Data.Contexts;
+using UserWebAPI.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,20 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<UserContext>(options =>
 options.UseSqlite(builder.Configuration.GetConnectionString("DbConnection")));
 
+//add user service
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 var app = builder.Build();
+
+//apply migration
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<UserContext>();
+
+    context.Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

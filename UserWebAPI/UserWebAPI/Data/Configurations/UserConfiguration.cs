@@ -20,7 +20,7 @@ namespace UserWebAPI.Data.Configurations
 
             builder.Property(e => e.Gender).HasColumnName("Gender");
 
-            builder.Property(e => e.BirthDay).HasColumnName("Birthday");
+            builder.Property(e => e.BirthDay).HasColumnName("BirthDay");
 
             builder.Property(e => e.Admin).HasColumnName("Admin");
 
@@ -43,12 +43,10 @@ namespace UserWebAPI.Data.Configurations
                 Password = "admin",
                 Name = "Админ",
                 Gender = 2,
-                BirthDay = DateTime.MinValue,
+                BirthDay = DateTime.Now,
                 Admin = true,
-                CreatedOn = DateTime.Now.AddMonths(-2),
+                CreatedOn = DateTime.Now,
                 CreatedBy = "GOD",
-                ModifiedOn = DateTime.Now.AddMonths(-2),
-                ModifiedBy = ""
             });
         }
     }

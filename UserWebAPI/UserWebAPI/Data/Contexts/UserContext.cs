@@ -9,10 +9,7 @@ namespace UserWebAPI.Data.Contexts
         public DbSet<User> User { get; set; }
 
         public UserContext(DbContextOptions<UserContext> options)
-            : base(options)
-        {
-            Database.EnsureCreated();
-        }
+            : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
