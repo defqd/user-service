@@ -18,12 +18,6 @@ namespace UserWebAPI.Data.Repositories
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns></returns>
-        public Task<bool> UserExistsAsync(string login);
-        /// <summary>
-        /// Проверить является ли пользователь админом
-        /// </summary>
-        /// <param name="login">Логин пользователя</param>
-        /// <returns></returns>
-        public Task<bool> IsAdmin(string login);
+        public Task<User> UserExistsAsync(string login, string password);
     }
 }

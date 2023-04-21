@@ -34,19 +34,18 @@ namespace UserWebAPI.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                bool isAdmin = await _userRepository.IsAdmin(login);
-                if(!isAdmin)
+                var existUser = await _userRepository.UserExistsAsync(login, password);
+
+                if(existUser == null)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Неправильный логин или пароль");
+                }
+
+                if (!existUser.Admin)
                 {
                     return StatusCode(StatusCodes.Status500InternalServerError,
                     "Это действие доступно только администратору");
-                }
-
-                bool existUser = await _userRepository.UserExistsAsync(user.Login);
-
-                if (existUser)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Пользователь с этим логином уже существует");
                 }
 
                 var newUser = new User

@@ -10,22 +10,21 @@ namespace UserWebAPI.Dto
         /// <summary>
         /// Логи пользователя
         /// </summary>
-        [RegularExpression("[a-zA-Z\\d]+")]
+        [StringLength(50, MinimumLength = 3)]
         public string Login { get; set; }
         /// <summary>
         /// Пароль пользователя
         /// </summary>
-        [RegularExpression("[a-zA-Z\\d]+")]
+        [StringLength(50, MinimumLength = 6)]
         public string Password { get; set; }
         /// <summary>
         /// Имя пользователя
         /// </summary>
-        [RegularExpression("[a-zA-Zа-яА-ЯёЁ]+")]
+        [StringLength(50, MinimumLength = 3)]
         public string Name { get; set; }
         /// <summary>
         /// Пол пользователя
         /// </summary>
-        [RegularExpression("[0-2]")]
         public int Gender { get; set; }
         /// <summary>
         /// Дата рождения пользователя

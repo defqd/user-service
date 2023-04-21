@@ -21,24 +21,11 @@ namespace UserWebAPI.Data.Repositories
             return result.Entity;
         }
 
-        public async Task<bool> IsAdmin(string login)
+        public async Task<User> UserExistsAsync(string login, string password)
         {
-            var result = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
+            var result = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login && x.Password == password);
 
-            if (!result.Admin)
-                return false;
-
-            return true;
-        }
-
-        public async Task<bool> UserExistsAsync(string login)
-        {
-            var result = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
-            if (result == null)
-            {
-                return false;
-            }
-            return true;
+            return result;
         }
     }
 }
