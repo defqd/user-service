@@ -17,7 +17,13 @@ namespace UserWebAPI.Data.Repositories
         /// Поиск пользователя по логину
         /// </summary>
         /// <param name="login">Логин пользователя</param>
+        /// <param name="password">Пароль пользователя</param>
         /// <returns></returns>
         public Task<User> UserExistsAsync(string login, string password);
+        /// <summary>
+        /// Возвращает всех активных пользователей
+        /// </summary>
+        /// <returns></returns>
+        public Task<IEnumerable<User>> GetAllActiveUsersAsync();
     }
 }

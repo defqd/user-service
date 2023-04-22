@@ -70,5 +70,27 @@ namespace UserWebAPI.Controllers
                     "Ошибка при создании нового пользователя");
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllActiveUsers(string login, string password)
+        {
+            var existUser = await _userRepository.UserExistsAsync(login, password);
+
+            if (existUser == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Неправильный логин или пароль");
+            }
+
+            if (!existUser.Admin)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                "Это действие доступно только администратору");
+            }
+
+            var result = await _userRepository.GetAllActiveUsersAsync();
+
+            return Ok(result);
+        }
     }
 }

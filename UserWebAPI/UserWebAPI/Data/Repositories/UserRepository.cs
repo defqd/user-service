@@ -21,6 +21,13 @@ namespace UserWebAPI.Data.Repositories
             return result.Entity;
         }
 
+        public async Task<IEnumerable<User>> GetAllActiveUsersAsync()
+        {
+            var result = await _dbContext.User.Where(x => x.RevokedOn == null).OrderBy(x => x.CreatedOn).ToListAsync();
+
+            return result;
+        }
+
         public async Task<User> UserExistsAsync(string login, string password)
         {
             var result = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login && x.Password == password);
