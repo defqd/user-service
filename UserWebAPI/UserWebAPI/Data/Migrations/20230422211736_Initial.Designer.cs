@@ -11,7 +11,7 @@ using UserWebAPI.Data.Contexts;
 namespace UserWebAPI.Data.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20230421181122_Initial")]
+    [Migration("20230422211736_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -35,6 +35,7 @@ namespace UserWebAPI.Data.Migrations
                         .HasColumnName("BirthDay");
 
                     b.Property<string>("CreatedBy")
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("CreatedBy");
 
@@ -48,10 +49,12 @@ namespace UserWebAPI.Data.Migrations
 
                     b.Property<string>("Login")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("Login");
 
                     b.Property<string>("ModifiedBy")
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("ModifiedBy");
 
@@ -61,15 +64,18 @@ namespace UserWebAPI.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("Name");
 
                     b.Property<string>("Password")
                         .IsRequired()
+                        .HasMaxLength(150)
                         .HasColumnType("TEXT")
                         .HasColumnName("Password");
 
                     b.Property<string>("RevokedBy")
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("RevokedBy");
 
@@ -84,15 +90,15 @@ namespace UserWebAPI.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("58cec208-48ce-4491-9a0c-beb0deaa9b5d"),
+                            Id = new Guid("28eb2822-b5cc-40c4-bc18-7b88b6cd3a8f"),
                             Admin = true,
-                            BirthDay = new DateTime(2023, 4, 21, 21, 11, 22, 195, DateTimeKind.Local).AddTicks(613),
+                            BirthDay = new DateTime(2023, 4, 23, 0, 17, 36, 320, DateTimeKind.Local).AddTicks(8340),
                             CreatedBy = "GOD",
-                            CreatedOn = new DateTime(2023, 4, 21, 21, 11, 22, 195, DateTimeKind.Local).AddTicks(625),
+                            CreatedOn = new DateTime(2023, 4, 23, 0, 17, 36, 320, DateTimeKind.Local).AddTicks(8351),
                             Gender = 2,
                             Login = "admin",
                             Name = "Админ",
-                            Password = "admin"
+                            Password = "admin01"
                         });
                 });
 #pragma warning restore 612, 618

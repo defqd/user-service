@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using UserWebAPI.Data.Repositories;
 using UserWebAPI.Dto;
 using UserWebAPI.Models;
@@ -22,30 +24,23 @@ namespace UserWebAPI.Controllers
         /// <summary>
         /// Метод для создание пользователя по логину, паролю, имени, полу и дате рождения + указание будет ли пользователь админом
         /// </summary>
-        /// <param name="login">Логмн пользователя</param>
-        /// <param name="password">Пароль пользователя</param>
         /// <param name="user">Модель dto для регистрации пользователя</param>
         /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
-        [HttpPost("create")]
-        public async Task<ActionResult> CreateUserAsync(string login, string password, CreateUserDto user)
+        [HttpPost("Create"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> CreateUserAsync(CreateUserDto user)
         {
             try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var existUser = await _userRepository.UserExistsAsync(login, password);
+                var creator = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+
+                var existUser = _userRepository.UserExistsAsync(user.Login, user.Password);
 
                 if(existUser == null)
                 {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Неправильный логин или пароль");
-                }
-
-                if (!existUser.Admin)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Это действие доступно только администратору");
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Пользователь с таким логином уже существует");
                 }
 
                 var newUser = new User
@@ -56,7 +51,7 @@ namespace UserWebAPI.Controllers
                     Gender = user.Gender,
                     BirthDay = user.BirthDay,
                     Admin = user.Admin,
-                    CreatedBy = user.Login,
+                    CreatedBy = creator,
                     CreatedOn = DateTime.Now
                 };
 
@@ -70,25 +65,20 @@ namespace UserWebAPI.Controllers
                     "Ошибка при создании нового пользователя");
             }
         }
-
-        [HttpGet]
-        public async Task<ActionResult> GetAllActiveUsers(string login, string password)
+        /// <summary>
+        /// Метод возвращает список активных пользователей
+        /// </summary>
+        /// <returns>Возвращает код 200 и список активных пользователей - если обработка успешна или 500 - если произошла ошибка.</returns>
+        [HttpGet("GetAllActiveUsers"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetAllActiveUsers()
         {
-            var existUser = await _userRepository.UserExistsAsync(login, password);
-
-            if (existUser == null)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Неправильный логин или пароль");
-            }
-
-            if (!existUser.Admin)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                "Это действие доступно только администратору");
-            }
-
             var result = await _userRepository.GetAllActiveUsersAsync();
+
+            if(result == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError,
+                    "Активных пользователей не существует");
+            }
 
             return Ok(result);
         }

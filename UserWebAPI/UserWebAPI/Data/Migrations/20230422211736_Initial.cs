@@ -16,18 +16,18 @@ namespace UserWebAPI.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Login = table.Column<string>(type: "TEXT", nullable: false),
-                    Password = table.Column<string>(type: "TEXT", nullable: false),
-                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Login = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     Gender = table.Column<int>(type: "INTEGER", nullable: false),
                     BirthDay = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Admin = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    CreatedBy = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
                     ModifiedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    ModifiedBy = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
                     RevokedOn = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    RevokedBy = table.Column<string>(type: "TEXT", nullable: true)
+                    RevokedBy = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,7 @@ namespace UserWebAPI.Data.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "Id", "Admin", "BirthDay", "CreatedBy", "CreatedOn", "Gender", "Login", "ModifiedBy", "ModifiedOn", "Name", "Password", "RevokedBy", "RevokedOn" },
-                values: new object[] { new Guid("58cec208-48ce-4491-9a0c-beb0deaa9b5d"), true, new DateTime(2023, 4, 21, 21, 11, 22, 195, DateTimeKind.Local).AddTicks(613), "GOD", new DateTime(2023, 4, 21, 21, 11, 22, 195, DateTimeKind.Local).AddTicks(625), 2, "admin", null, null, "Админ", "admin", null, null });
+                values: new object[] { new Guid("28eb2822-b5cc-40c4-bc18-7b88b6cd3a8f"), true, new DateTime(2023, 4, 23, 0, 17, 36, 320, DateTimeKind.Local).AddTicks(8340), "GOD", new DateTime(2023, 4, 23, 0, 17, 36, 320, DateTimeKind.Local).AddTicks(8351), 2, "admin", null, null, "Админ", "admin01", null, null });
         }
 
         /// <inheritdoc />
