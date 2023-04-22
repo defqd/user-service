@@ -14,6 +14,8 @@ namespace UserWebAPI.Helper.Validation
 
             var result = Regex.IsMatch(text, @"^[0-9a-zA-Zа]+$");
 
+            ErrorMessage = "Поле должно содержать только латинские буквы или цифры";
+
             return result;
         }
     }

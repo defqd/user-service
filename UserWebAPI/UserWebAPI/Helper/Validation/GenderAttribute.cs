@@ -14,6 +14,8 @@ namespace UserWebAPI.Helper.Validation
             if (gender >= 0 && gender <= 2) 
                 return true;
 
+            ErrorMessage = "Поле пол может содержать 0 - Женский, 1 - Мужской, 2 - Неизвестно";
+
             return false;
         }
     }
