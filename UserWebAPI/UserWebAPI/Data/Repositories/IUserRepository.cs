@@ -1,4 +1,5 @@
-﻿using UserWebAPI.Models;
+﻿using UserWebAPI.Dto;
+using UserWebAPI.Models;
 
 namespace UserWebAPI.Data.Repositories
 {
@@ -50,5 +51,23 @@ namespace UserWebAPI.Data.Repositories
         /// <param name="login">Логин пользователя</param>
         /// <returns></returns>
         public Task RecoverUserAsync(string login);
+        /// <summary>
+        /// Метод для запроса пользователя по логину (для админа)
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns></returns>
+        public Task<GetUserByLoginDto> GetUserByLoginForAdminAsync(string login);
+        /// <summary>
+        /// Метод для запроса пользователя по логину (для пользователя)
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns></returns>
+        public Task<User> GetUserByLoginForUserAsync(string login);
+        /// <summary>
+        /// Метод для запроса всех пользователей старше определённого возраста
+        /// </summary>
+        /// <param name="age">Возраст пользователей</param>
+        /// <returns></returns>
+        public Task<IEnumerable<User>> GetUsersByAgeAsync(int age);
     }
 }

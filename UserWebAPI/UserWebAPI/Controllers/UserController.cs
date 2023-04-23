@@ -74,11 +74,58 @@ namespace UserWebAPI.Controllers
             return Ok(result);
         }
         /// <summary>
+        /// Метод для запроса пользователя по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает код 200 и информацию пользователе - если обработка успешна или 500 - если произошла ошибка.</returns>
+        [HttpGet("GetUser/{login}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetUserByLogin(string login)
+        {
+            var user =  await _userRepository.GetUserByLoginForAdminAsync(login);
+
+            if (user == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователя не существует");
+            }
+
+            return Ok(user);
+        }
+        /// <summary>
+        /// Метод для апрос пользователя по токену (для пользователя)
+        /// </summary>
+        /// <returns>Возвращает код 200 и информацию пользователе - если обработка успешна или 400 - если произошла ошибка.</returns>
+        [HttpGet("GetUser"), Authorize(Roles = "User")]
+        public async Task<ActionResult> GetUser()
+        {
+            var curUser = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+
+            var user =  await _userRepository.GetUserByLoginForUserAsync(curUser);
+
+            return Ok(user);
+        }
+        /// <summary>
+        /// Метод для запроса всех пользователей старше определённого возраста
+        /// </summary>
+        /// <param name="age">Возраст пользователя</param>
+        /// <returns>Возвращает код 200 и информацию пользователе - если обработка успешна или 500 - если произошла ошибка.</returns>
+        [HttpGet("GetUserByAge/{age}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> GetUserByAge(int age)
+        {
+            var users =  await _userRepository.GetUsersByAgeAsync(age);
+
+            if (users == null)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователи старше текущего возраста не найдены");
+            }
+
+            return Ok(users);
+        }
+        /// <summary>
         /// Метод для удаления пользователя по логину
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
-        [HttpDelete("DeleteUser{login}"), Authorize(Roles = "Admin")]
+        [HttpDelete("DeleteUser/{login}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteUserByLogin(string login)
         {
             var existUser = await _userRepository.UserExistsAsync(login);
@@ -97,7 +144,7 @@ namespace UserWebAPI.Controllers
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
-        [HttpPatch("DeleteUser{login}"), Authorize(Roles = "Admin")]
+        [HttpPatch("DeleteUser/{login}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> SoftDeleteUserByLogin(string login)
         {
             var existUser = await _userRepository.UserExistsAsync(login);
@@ -113,8 +160,12 @@ namespace UserWebAPI.Controllers
 
             return Ok("Пользователь успешно удален");
         }
-
-        [HttpPatch("RecoverUser{login}"), Authorize(Roles = "Admin")]
+        /// <summary>
+        /// Метод для восстановления пользователя по логину после мягкого удаления
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
+        [HttpPatch("RecoverUser/{login}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> RecoverUserByLogin(string login)
         {
             var existUser = await _userRepository.UserExistsAsync(login);

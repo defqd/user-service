@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Server.IIS.Core;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Reflection;
 using UserWebAPI.Data.Contexts;
+using UserWebAPI.Dto;
 using UserWebAPI.Models;
 
 namespace UserWebAPI.Data.Repositories
@@ -16,7 +18,7 @@ namespace UserWebAPI.Data.Repositories
 
         public async Task CreateUserAsync(User user)
         {
-            var result = await _dbContext.AddAsync(user);
+            await _dbContext.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
         }
@@ -52,6 +54,33 @@ namespace UserWebAPI.Data.Repositories
 
             return result;
         }
+        public async Task<GetUserByLoginDto> GetUserByLoginForAdminAsync(string login)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
+
+            return new GetUserByLoginDto
+            {
+                Name = user.Name,
+                BirthDay = user.BirthDay,
+                Gender = user.Gender,
+                IsActive = user.RevokedOn == null
+            };
+        }
+
+        public async Task<User> GetUserByLoginForUserAsync(string login)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
+
+            return user;
+        }
+
+        public async Task<IEnumerable<User>> GetUsersByAgeAsync(int age)
+        {
+            var result = await _dbContext.User.Where(x => x.BirthDay != null && (DateTime.Now.Year - x.BirthDay.Value.Year) >= age).ToListAsync();
+
+            return result;
+        }
+
 
         public async Task<bool> UserExistsAsync(string login)
         {
