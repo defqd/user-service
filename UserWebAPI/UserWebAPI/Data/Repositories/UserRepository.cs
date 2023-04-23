@@ -33,11 +33,8 @@ namespace UserWebAPI.Data.Repositories
         {
             var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
 
-            if(user != null)
-            {
-                user.RevokedBy = revokedBy;
-                user.RevokedOn = DateTime.Now;
-            }
+            user.RevokedBy = revokedBy;
+            user.RevokedOn = DateTime.Now;
 
             await _dbContext.SaveChangesAsync();
         }
@@ -64,6 +61,16 @@ namespace UserWebAPI.Data.Repositories
                 return false;
 
             return true;
+        }
+
+        public async Task RecoverUserAsync(string login)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
+
+            user.RevokedBy = null;
+            user.RevokedOn = null;
+
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

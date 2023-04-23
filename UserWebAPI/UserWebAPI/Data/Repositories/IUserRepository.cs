@@ -44,5 +44,11 @@ namespace UserWebAPI.Data.Repositories
         /// <param name="revorkedBy">Логин Пользователя, от имени которого этот пользователь удалён</param>
         /// <returns></returns>
         public Task SoftDeleteUserAsync(string login, string revorkedBy);
+        /// <summary>
+        /// Метод для восстановления пользователя по логину - очистка полей (RevokedOn, RevokedBy) 
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns></returns>
+        public Task RecoverUserAsync(string login);
     }
 }

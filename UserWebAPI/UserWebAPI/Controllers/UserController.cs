@@ -97,7 +97,7 @@ namespace UserWebAPI.Controllers
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
-        [HttpPut("DeleteUser{login}"), Authorize(Roles = "Admin")]
+        [HttpPatch("DeleteUser{login}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> SoftDeleteUserByLogin(string login)
         {
             var existUser = await _userRepository.UserExistsAsync(login);
@@ -114,5 +114,19 @@ namespace UserWebAPI.Controllers
             return Ok("Пользователь успешно удален");
         }
 
+        [HttpPatch("RecoverUser{login}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> RecoverUserByLogin(string login)
+        {
+            var existUser = await _userRepository.UserExistsAsync(login);
+
+            if (!existUser)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователя с таким логином не существует");
+            }
+
+            await _userRepository.RecoverUserAsync(login);
+
+            return Ok("Пользователь успешно восстановлен");
+        }
     }
 }
