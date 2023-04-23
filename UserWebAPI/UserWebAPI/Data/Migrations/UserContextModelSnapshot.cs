@@ -82,16 +82,16 @@ namespace UserWebAPI.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("28eb2822-b5cc-40c4-bc18-7b88b6cd3a8f"),
+                            Id = new Guid("ad86aa94-5417-4438-b34a-d37bfaf032e7"),
                             Admin = true,
-                            BirthDay = new DateTime(2023, 4, 23, 0, 17, 36, 320, DateTimeKind.Local).AddTicks(8340),
+                            BirthDay = new DateTime(2023, 4, 23, 3, 8, 40, 457, DateTimeKind.Local).AddTicks(3465),
                             CreatedBy = "GOD",
-                            CreatedOn = new DateTime(2023, 4, 23, 0, 17, 36, 320, DateTimeKind.Local).AddTicks(8351),
+                            CreatedOn = new DateTime(2023, 4, 23, 3, 8, 40, 457, DateTimeKind.Local).AddTicks(3477),
                             Gender = 2,
                             Login = "admin",
                             Name = "Админ",

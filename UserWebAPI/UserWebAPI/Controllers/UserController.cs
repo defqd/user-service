@@ -29,41 +29,33 @@ namespace UserWebAPI.Controllers
         [HttpPost("Create"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreateUserAsync(CreateUserDto user)
         {
-            try
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var creator = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+
+            var existUser = await _userRepository.UserExistsAsync(user.Login);
+
+            if (existUser)
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-                var creator = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
-
-                var existUser = _userRepository.UserExistsAsync(user.Login, user.Password);
-
-                if(existUser == null)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Пользователь с таким логином уже существует");
-                }
-
-                var newUser = new User
-                {
-                    Login = user.Login,
-                    Password = user.Password,
-                    Name = user.Name,
-                    Gender = user.Gender,
-                    BirthDay = user.BirthDay,
-                    Admin = user.Admin,
-                    CreatedBy = creator,
-                    CreatedOn = DateTime.Now
-                };
-
-                await _userRepository.CreateUserAsync(newUser);
-
-                return Ok("Пользователь успешно добавлен");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователь с таким логином уже существует");
             }
-            catch (Exception)
+
+            var newUser = new User
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Ошибка при создании нового пользователя");
-            }
+                Login = user.Login,
+                Password = user.Password,
+                Name = user.Name,
+                Gender = user.Gender,
+                BirthDay = user.BirthDay,
+                Admin = user.Admin,
+                CreatedBy = creator,
+                CreatedOn = DateTime.Now
+            };
+
+            await _userRepository.CreateUserAsync(newUser);
+
+            return Ok("Пользователь успешно добавлен");
         }
         /// <summary>
         /// Метод возвращает список активных пользователей
@@ -76,11 +68,51 @@ namespace UserWebAPI.Controllers
 
             if(result == null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError,
-                    "Активных пользователей не существует");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Активных пользователей не существует");
             }
 
             return Ok(result);
         }
+        /// <summary>
+        /// Метод для удаления пользователя по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
+        [HttpDelete("DeleteUser{login}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> DeleteUserByLogin(string login)
+        {
+            var existUser = await _userRepository.UserExistsAsync(login);
+
+            if (!existUser)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователя с таким логином не существует");
+            }
+            
+            await _userRepository.DeleteUserAsync(login);
+
+            return Ok("Пользователь успешно удален");
+        }
+        /// <summary>
+        /// Метод для мягкого удаления пользователя по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
+        [HttpPut("DeleteUser{login}"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult> SoftDeleteUserByLogin(string login)
+        {
+            var existUser = await _userRepository.UserExistsAsync(login);
+
+            if (!existUser)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователя с таким логином не существует");
+            }
+
+            var revokedBy = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+
+            await _userRepository.SoftDeleteUserAsync(login, revokedBy);
+
+            return Ok("Пользователь успешно удален");
+        }
+
     }
 }

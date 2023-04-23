@@ -8,22 +8,41 @@ namespace UserWebAPI.Data.Repositories
     public interface IUserRepository
     {
         /// <summary>
-        /// Регистрация нового пользователя
+        /// Метод для регистрация нового пользователя
         /// </summary>
         /// <param name="user">Пользователь</param>
         /// <returns></returns>
-        public Task<User> CreateUserAsync(User user);
+        public Task CreateUserAsync(User user);
         /// <summary>
-        /// Поиск пользователя по логину
+        /// Метод для проверки существования пользователя по логину 
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
+        public Task<bool> UserExistsAsync(string login);
+        /// <summary>
+        /// Метод для поиска пользователя по логину и паролю
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <param name="password">Пароль пользователя</param>
         /// <returns></returns>
-        public Task<User> UserExistsAsync(string login, string password);
+        public Task<User> GetUserByLoginAndPasswordAsync(string login, string password);
         /// <summary>
-        /// Возвращает всех активных пользователей
+        /// Метод для поиска всех активных пользователей
         /// </summary>
         /// <returns></returns>
         public Task<IEnumerable<User>> GetAllActiveUsersAsync();
+        /// <summary>
+        /// Метод для удаления пользователя по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <returns></returns>
+        public Task DeleteUserAsync(string login);
+        /// <summary>
+        /// Метод для мягкого удаления пользователя по логину
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <param name="revorkedBy">Логин Пользователя, от имени которого этот пользователь удалён</param>
+        /// <returns></returns>
+        public Task SoftDeleteUserAsync(string login, string revorkedBy);
     }
 }

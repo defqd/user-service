@@ -31,14 +31,14 @@ namespace UserWebAPI.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginUserDto user)
         {
-            var existUser = await _userRepository.UserExistsAsync(user.Login, user.Password);
+            var curUser = await _userRepository.GetUserByLoginAndPasswordAsync(user.Login, user.Password);
 
-            if (existUser == null)
+            if (curUser == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,"Неправильный логин или пароль");
             }
 
-            if (existUser.RevokedBy != null)
+            if (curUser.RevokedBy != null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Пользователь удален");
             }
@@ -50,7 +50,7 @@ namespace UserWebAPI.Controllers
                 claims: new List<Claim>
                 {
                     new (ClaimTypes.Name, user.Login),
-                    new (ClaimTypes.Role, existUser.Admin ? "Admin":"User")
+                    new (ClaimTypes.Role, curUser.Admin ? "Admin":"User")
                 },
                 expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: signinCredentials

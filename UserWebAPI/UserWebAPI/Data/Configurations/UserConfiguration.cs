@@ -11,7 +11,7 @@ namespace UserWebAPI.Data.Configurations
         {
             builder.HasKey(e => e.Id);
 
-            builder.ToTable("User");
+            builder.ToTable("Users");
 
             builder.Property(e => e.Login).HasColumnName("Login");
 
