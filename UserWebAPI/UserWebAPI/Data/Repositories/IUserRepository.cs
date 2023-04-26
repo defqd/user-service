@@ -62,12 +62,29 @@ namespace UserWebAPI.Data.Repositories
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns></returns>
-        public Task<User> GetUserByLoginForUserAsync(string login);
+        public Task<User> GetUserByLoginAsync(string login);
         /// <summary>
         /// Метод для запроса всех пользователей старше определённого возраста
         /// </summary>
         /// <param name="age">Возраст пользователей</param>
         /// <returns></returns>
         public Task<IEnumerable<User>> GetUsersByAgeAsync(int age);
+        /// <summary>
+        /// Метод для изменения логина пользователя
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <param name="newLogin">Новый логин пользоателя</param>
+        /// <param name="modifiedBy">Кем изменено</param>
+        /// <returns></returns>
+        public Task UpdateUserLoginAsync(string login, string newLogin, string modifiedBy);
+        /// <summary>
+        /// Метод для изменения пароля пользователя
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <param name="newPassword">Новый пароль пользователя</param>
+        /// <param name="modifiedBy">Кем изменено</param>
+        /// <returns></returns>
+        public Task UpdateUserPasswordAsync(string login, string newPassword, string modifiedBy);
+        public Task UpdateUserAsync(User user, string modifiedBy);
     }
 }

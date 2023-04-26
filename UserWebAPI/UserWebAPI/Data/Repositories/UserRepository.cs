@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Server.IIS.Core;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Reflection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 using UserWebAPI.Data.Contexts;
 using UserWebAPI.Dto;
 using UserWebAPI.Models;
@@ -19,6 +17,35 @@ namespace UserWebAPI.Data.Repositories
         public async Task CreateUserAsync(User user)
         {
             await _dbContext.AddAsync(user);
+
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task UpdateUserAsync(User user, string modifiedBy)
+        {
+            user.ModifiedBy = modifiedBy;
+            user.ModifiedOn = DateTime.Now;
+
+            _dbContext.Update(user);
+
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task UpdateUserLoginAsync(string login, string newLogin, string modifiedBy)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
+
+            user.Login = newLogin;
+            user.ModifiedBy = modifiedBy;
+            user.ModifiedOn = DateTime.Now;
+
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task UpdateUserPasswordAsync(string login, string newPassword, string modifiedBy)
+        {
+            var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
+
+            user.Password = newPassword;
+            user.ModifiedBy = modifiedBy;
+            user.ModifiedOn = DateTime.Now;
 
             await _dbContext.SaveChangesAsync();
         }
@@ -67,7 +94,7 @@ namespace UserWebAPI.Data.Repositories
             };
         }
 
-        public async Task<User> GetUserByLoginForUserAsync(string login)
+        public async Task<User> GetUserByLoginAsync(string login)
         {
             var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
 

@@ -20,7 +20,6 @@ namespace UserWebAPI.Controllers
         {
             _userRepository = userRepository;
         }
-
         /// <summary>
         /// Метод для создание пользователя по логину, паролю, имени, полу и дате рождения + указание будет ли пользователь админом
         /// </summary>
@@ -61,7 +60,7 @@ namespace UserWebAPI.Controllers
         /// Метод возвращает список активных пользователей
         /// </summary>
         /// <returns>Возвращает код 200 и список активных пользователей - если обработка успешна или 500 - если произошла ошибка.</returns>
-        [HttpGet("GetAllActiveUsers"), Authorize(Roles = "Admin")]
+        [HttpGet("GetAllActive"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> GetAllActiveUsers()
         {
             var result = await _userRepository.GetAllActiveUsersAsync();
@@ -99,7 +98,7 @@ namespace UserWebAPI.Controllers
         {
             var curUser = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
 
-            var user =  await _userRepository.GetUserByLoginForUserAsync(curUser);
+            var user =  await _userRepository.GetUserByLoginAsync(curUser);
 
             return Ok(user);
         }
@@ -165,7 +164,7 @@ namespace UserWebAPI.Controllers
         /// </summary>
         /// <param name="login">Логин пользователя</param>
         /// <returns>Возвращает код 200 - если обработка успешна или 500 - если произошла ошибка.</returns>
-        [HttpPatch("RecoverUser/{login}"), Authorize(Roles = "Admin")]
+        [HttpPatch("Recover/{login}"), Authorize(Roles = "Admin")]
         public async Task<ActionResult> RecoverUserByLogin(string login)
         {
             var existUser = await _userRepository.UserExistsAsync(login);
@@ -178,6 +177,69 @@ namespace UserWebAPI.Controllers
             await _userRepository.RecoverUserAsync(login);
 
             return Ok("Пользователь успешно восстановлен");
+        }
+        [HttpPatch("Login/{login}"), Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult> UpdateLogin(string login, string newLogin)
+        {
+            var curUser = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            var curRole = HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+
+            if (curRole != "Admin" && curUser != login)
+                return Forbid();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if(login == newLogin)
+                return StatusCode(StatusCodes.Status500InternalServerError, "Логин уже используется");
+
+            await _userRepository.UpdateUserLoginAsync(login, newLogin, curUser);
+
+            return Ok();
+        }
+
+        [HttpPatch("Password/{login}"), Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult> UpdatePassword(string login, string newPassword)
+        {
+            var curUser = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            var curRole = HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+
+            if (curRole != "Admin" && curUser != login)
+                return Forbid();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _userRepository.UpdateUserPasswordAsync(login, newPassword, curUser);
+
+            return Ok();
+        }
+
+        [HttpPatch("Update/{login}"), Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult> UpdateUser(string login, UpdateUserDto user)
+        {
+            var curUser = HttpContext?.User.FindFirstValue(ClaimTypes.Name);
+            var curRole = HttpContext?.User.FindFirstValue(ClaimTypes.Role);
+
+            if (curRole != "Admin" && curUser != login)
+                return Forbid();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var changedUser = await _userRepository.GetUserByLoginAsync(login);
+
+            if(changedUser == null)
+                return StatusCode(StatusCodes.Status500InternalServerError, "Пользователя с таким логином не существует");
+
+            changedUser.Login = login;
+            changedUser.Name = user.Name ?? changedUser.Name;
+            changedUser.BirthDay = user.BirthDay ?? changedUser.BirthDay;
+            changedUser.Gender = user.Gender ?? changedUser.Gender;
+
+            await _userRepository.UpdateUserAsync(changedUser, curUser);
+
+            return Ok();
         }
     }
 }
