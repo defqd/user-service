@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserWebAPI.Data.Contexts;
 using UserWebAPI.Dto;
+using UserWebAPI.Helper.Hashing;
 using UserWebAPI.Models;
 
 namespace UserWebAPI.Data.Repositories
@@ -44,7 +45,7 @@ namespace UserWebAPI.Data.Repositories
         {
             var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
 
-            user.Password = newPassword;
+            user.Password = HashingPassword.Hashing(newPassword);
             user.ModifiedBy = modifiedBy;
             user.ModifiedOn = DateTime.Now;
 

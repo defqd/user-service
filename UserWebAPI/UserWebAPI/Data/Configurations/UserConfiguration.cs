@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using UserWebAPI.Helper;
+using UserWebAPI.Helper.Hashing;
 using UserWebAPI.Models;
 
 namespace UserWebAPI.Data.Configurations
@@ -41,7 +42,7 @@ namespace UserWebAPI.Data.Configurations
             {
                 Id = Guid.NewGuid(),
                 Login = "admin",
-                Password = "admin01",
+                Password = HashingPassword.Hashing("admin01"),
                 Name = "Админ",
                 Gender = 2,
                 BirthDay = DateTime.Now,

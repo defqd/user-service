@@ -16,9 +16,9 @@ namespace UserWebAPI.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Login = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    Login = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    Password = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
                     Gender = table.Column<int>(type: "INTEGER", nullable: false),
                     BirthDay = table.Column<DateTime>(type: "TEXT", nullable: true),
                     Admin = table.Column<bool>(type: "INTEGER", nullable: false),
@@ -37,7 +37,7 @@ namespace UserWebAPI.Data.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Admin", "BirthDay", "CreatedBy", "CreatedOn", "Gender", "Login", "ModifiedBy", "ModifiedOn", "Name", "Password", "RevokedBy", "RevokedOn" },
-                values: new object[] { new Guid("e80d87bf-a3b5-4b7c-a810-d5f267c8deab"), true, new DateTime(2023, 4, 26, 22, 58, 11, 160, DateTimeKind.Local).AddTicks(2507), "GOD", new DateTime(2023, 4, 26, 22, 58, 11, 160, DateTimeKind.Local).AddTicks(2519), 2, "admin", null, null, "Админ", "admin01", null, null });
+                values: new object[] { new Guid("8ee18e65-f915-4c94-b58a-dbac358c7099"), true, new DateTime(2023, 4, 27, 21, 20, 15, 489, DateTimeKind.Local).AddTicks(8188), "GOD", new DateTime(2023, 4, 27, 21, 20, 15, 489, DateTimeKind.Local).AddTicks(8204), 2, "admin", null, null, "Админ", "YLJkBjuROK1Fdo6+ZAAP0QVf0cogsfCx635XSA1Svbs=", null, null });
         }
 
         /// <inheritdoc />

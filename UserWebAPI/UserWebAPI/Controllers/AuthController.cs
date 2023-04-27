@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text;
 using UserWebAPI.Data.Repositories;
 using UserWebAPI.Dto;
+using UserWebAPI.Helper.Hashing;
 
 namespace UserWebAPI.Controllers
 {
@@ -23,6 +24,7 @@ namespace UserWebAPI.Controllers
             _userRepository = userRepository;
             _configuration = configuration;
         }
+
         /// <summary>
         /// Метод для получения токена
         /// </summary>
@@ -31,17 +33,15 @@ namespace UserWebAPI.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login(LoginUserDto user)
         {
-            var curUser = await _userRepository.GetUserByLoginAndPasswordAsync(user.Login, user.Password);
+            var hashedPassword = HashingPassword.Hashing(user.Password);
+
+            var curUser = await _userRepository.GetUserByLoginAndPasswordAsync(user.Login, hashedPassword);
 
             if (curUser == null)
-            {
                 return StatusCode(StatusCodes.Status500InternalServerError,"Неправильный логин или пароль");
-            }
 
             if (curUser.RevokedBy != null)
-            {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Пользователь удален");
-            }
 
             var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:Secret").Value!));
             var signinCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);

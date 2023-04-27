@@ -11,7 +11,7 @@ using UserWebAPI.Data.Contexts;
 namespace UserWebAPI.Data.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20230426195811_Initial")]
+    [Migration("20230427182015_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -48,7 +48,6 @@ namespace UserWebAPI.Data.Migrations
                         .HasColumnName("Gender");
 
                     b.Property<string>("Login")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("Login");
@@ -63,13 +62,11 @@ namespace UserWebAPI.Data.Migrations
                         .HasColumnName("ModifiedOn");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("Name");
 
                     b.Property<string>("Password")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("Password");
@@ -90,15 +87,15 @@ namespace UserWebAPI.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e80d87bf-a3b5-4b7c-a810-d5f267c8deab"),
+                            Id = new Guid("8ee18e65-f915-4c94-b58a-dbac358c7099"),
                             Admin = true,
-                            BirthDay = new DateTime(2023, 4, 26, 22, 58, 11, 160, DateTimeKind.Local).AddTicks(2507),
+                            BirthDay = new DateTime(2023, 4, 27, 21, 20, 15, 489, DateTimeKind.Local).AddTicks(8188),
                             CreatedBy = "GOD",
-                            CreatedOn = new DateTime(2023, 4, 26, 22, 58, 11, 160, DateTimeKind.Local).AddTicks(2519),
+                            CreatedOn = new DateTime(2023, 4, 27, 21, 20, 15, 489, DateTimeKind.Local).AddTicks(8204),
                             Gender = 2,
                             Login = "admin",
                             Name = "Админ",
-                            Password = "admin01"
+                            Password = "YLJkBjuROK1Fdo6+ZAAP0QVf0cogsfCx635XSA1Svbs="
                         });
                 });
 #pragma warning restore 612, 618

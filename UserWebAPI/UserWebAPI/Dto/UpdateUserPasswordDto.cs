@@ -15,6 +15,7 @@ namespace UserWebAPI.Dto
         [LatinaLettersAndNumbersAttribute]
         [StringLength(50, MinimumLength = 3)]
         public string Login { get; set; }
+
         /// <summary>
         /// Пароль пользователя
         /// </summary>

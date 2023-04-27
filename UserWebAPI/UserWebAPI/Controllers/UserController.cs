@@ -19,6 +19,7 @@ namespace UserWebAPI.Controllers
         {
             _userService = userService;
         }
+
         /// <summary>
         /// Метод для создание пользователя по логину, паролю, имени, полу и дате рождения + указание будет ли пользователь админом
         /// </summary>
@@ -36,6 +37,7 @@ namespace UserWebAPI.Controllers
 
             return Ok(createdUser);
         }
+
         /// <summary>
         /// Метод возвращает список активных пользователей
         /// </summary>
@@ -47,6 +49,7 @@ namespace UserWebAPI.Controllers
 
             return Ok(users);
         }
+
         /// <summary>
         /// Метод для запроса пользователя по логину
         /// </summary>
@@ -59,6 +62,7 @@ namespace UserWebAPI.Controllers
 
             return Ok(user);
         }
+
         /// <summary>
         /// Метод для запрос пользователя по токену (для пользователя)
         /// </summary>
@@ -72,6 +76,7 @@ namespace UserWebAPI.Controllers
 
             return Ok(user);
         }
+
         /// <summary>
         /// Метод для запроса всех пользователей старше определённого возраста
         /// </summary>
@@ -84,6 +89,7 @@ namespace UserWebAPI.Controllers
 
             return Ok(users);
         }
+
         /// <summary>
         /// Метод для удаления пользователя по логину
         /// </summary>
@@ -99,6 +105,7 @@ namespace UserWebAPI.Controllers
 
             return Ok("Пользователь успешно удален");
         }
+
         /// <summary>
         /// Метод для восстановления пользователя по логину после мягкого удаления
         /// </summary>
@@ -111,6 +118,7 @@ namespace UserWebAPI.Controllers
 
             return Ok("Пользователь успешно восстановлен");
         }
+
         /// <summary>
         /// Метод для изменения логина пользователя
         /// </summary>
@@ -128,10 +136,11 @@ namespace UserWebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _userService.UpdateUserLoginAsync(user, curUser, curRole);
+            await _userService.UpdateUserLoginAsync(user, curUser);
             
             return Ok("Логин пользователя обновлен");
         }
+
         /// <summary>
         /// Метод для изменения пароля пользователя
         /// </summary>
@@ -149,10 +158,11 @@ namespace UserWebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _userService.UpdateUserPasswordAsync(user, curUser, curRole);
+            await _userService.UpdateUserPasswordAsync(user, curUser);
 
             return Ok("Пароль пользователя обновлен");
         }
+
         /// <summary>
         /// Метод для изменения имени, даты рождения или пола пользователя
         /// </summary>
@@ -171,7 +181,7 @@ namespace UserWebAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _userService.UpdateUserAsync(login, user, curUser, curRole);
+            await _userService.UpdateUserAsync(login, user, curUser);
 
             return Ok("Данные пользователя обновлены");
         }

@@ -1,5 +1,6 @@
 ﻿using UserWebAPI.Data.Repositories;
 using UserWebAPI.Dto;
+using UserWebAPI.Helper.Hashing;
 using UserWebAPI.Models;
 
 namespace UserWebAPI.Services
@@ -22,7 +23,7 @@ namespace UserWebAPI.Services
             User newUser = new()
             {
                 Login = user.Login,
-                Password = user.Password,
+                Password = HashingPassword.Hashing(user.Password),
                 Name = user.Name,
                 Gender = user.Gender,
                 BirthDay = user.BirthDay,
@@ -102,7 +103,7 @@ namespace UserWebAPI.Services
             await _userRepository.RecoverUserAsync(login);
         }
 
-        public async Task UpdateUserLoginAsync(UpdateUserLoginDto user, string curUser, string curRole)
+        public async Task UpdateUserLoginAsync(UpdateUserLoginDto user, string curUser)
         {
             if (user.Login == user.NewLogin)
                 throw new ArgumentException("Логин уже используется");
@@ -115,7 +116,7 @@ namespace UserWebAPI.Services
             await _userRepository.UpdateUserLoginAsync(user.Login, user.NewLogin, curUser);
         }
 
-        public async Task UpdateUserPasswordAsync(UpdateUserPasswordDto user, string curUser, string curRole)
+        public async Task UpdateUserPasswordAsync(UpdateUserPasswordDto user, string curUser)
         {
             var existUser = await _userRepository.UserExistsAsync(user.Login);
 
@@ -125,7 +126,7 @@ namespace UserWebAPI.Services
             await _userRepository.UpdateUserPasswordAsync(user.Login, user.NewPassword, curUser);
         }
 
-        public async Task UpdateUserAsync(string login, UpdateUserDto user, string curUser, string curRole)
+        public async Task UpdateUserAsync(string login, UpdateUserDto user, string curUser)
         {
             var changedUser = await _userRepository.GetUserByLoginAsync(login);
 
