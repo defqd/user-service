@@ -3,6 +3,7 @@ Web API .NET 7.0, реализующий API методы CRUD над сущно
 Данные пользователя Admin:
 * Логин: admin
 * Пароль: admin01
+
 В проекте использовалось:
 * Entity Framework CORE SQLite
 * Swagger
