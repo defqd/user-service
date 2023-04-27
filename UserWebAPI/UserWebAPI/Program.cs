@@ -5,12 +5,21 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using UserWebAPI.Data.Contexts;
 using UserWebAPI.Data.Repositories;
+using UserWebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+//Add DbContext
+builder.Services.AddDbContext<UserContext>(options =>
+options.UseSqlite(builder.Configuration.GetConnectionString("DbConnection")));
+
+//add user service
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddAuthentication(opt =>
 {
@@ -55,17 +64,10 @@ builder.Services.AddSwaggerGen(opt =>
                     Id="Bearer"
                 }
             },
-            new string[]{}
+            Array.Empty<string>()
         }
     });
 });
-
-//Add DbContext
-builder.Services.AddDbContext<UserContext>(options =>
-options.UseSqlite(builder.Configuration.GetConnectionString("DbConnection")));
-
-//add user service
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 

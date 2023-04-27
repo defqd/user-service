@@ -13,7 +13,7 @@ namespace UserWebAPI.Data.Repositories
         /// </summary>
         /// <param name="user">Пользователь</param>
         /// <returns></returns>
-        public Task CreateUserAsync(User user);
+        public Task<User> CreateUserAsync(User user);
         /// <summary>
         /// Метод для проверки существования пользователя по логину 
         /// </summary>
@@ -85,6 +85,12 @@ namespace UserWebAPI.Data.Repositories
         /// <param name="modifiedBy">Кем изменено</param>
         /// <returns></returns>
         public Task UpdateUserPasswordAsync(string login, string newPassword, string modifiedBy);
+        /// <summary>
+        /// Метод для изменения имени, даты рождения или пола пользователя
+        /// </summary>
+        /// <param name="user">Логин пользователя</param>
+        /// <param name="modifiedBy">Кем изменено</param>
+        /// <returns></returns>
         public Task UpdateUserAsync(User user, string modifiedBy);
     }
 }

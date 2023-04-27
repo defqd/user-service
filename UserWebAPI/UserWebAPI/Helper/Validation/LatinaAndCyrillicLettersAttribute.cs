@@ -12,7 +12,7 @@ namespace UserWebAPI.Helper.Validation
             if (text == null)
                 return false;
 
-            var result = Regex.IsMatch(text, @"^[a-zA-Zа-яёА-ЯЁ]+$");
+            bool result = Regex.IsMatch(text, @"^[a-zA-Zа-яёА-ЯЁ]+$");
 
             ErrorMessage = "Поле должно содержать только латинские или кириллические буквы";
 

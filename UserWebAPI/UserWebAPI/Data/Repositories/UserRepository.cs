@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 using UserWebAPI.Data.Contexts;
 using UserWebAPI.Dto;
 using UserWebAPI.Models;
@@ -14,11 +13,13 @@ namespace UserWebAPI.Data.Repositories
             _dbContext = userContext;
         }
 
-        public async Task CreateUserAsync(User user)
+        public async Task<User> CreateUserAsync(User user)
         {
-            await _dbContext.AddAsync(user);
+            var result = await _dbContext.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
+
+            return result.Entity;
         }
         public async Task UpdateUserAsync(User user, string modifiedBy)
         {

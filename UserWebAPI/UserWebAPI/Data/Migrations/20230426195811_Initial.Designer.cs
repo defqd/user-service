@@ -11,7 +11,7 @@ using UserWebAPI.Data.Contexts;
 namespace UserWebAPI.Data.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20230423000840_Initial")]
+    [Migration("20230426195811_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -70,7 +70,7 @@ namespace UserWebAPI.Data.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(150)
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT")
                         .HasColumnName("Password");
 
@@ -90,11 +90,11 @@ namespace UserWebAPI.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("ad86aa94-5417-4438-b34a-d37bfaf032e7"),
+                            Id = new Guid("e80d87bf-a3b5-4b7c-a810-d5f267c8deab"),
                             Admin = true,
-                            BirthDay = new DateTime(2023, 4, 23, 3, 8, 40, 457, DateTimeKind.Local).AddTicks(3465),
+                            BirthDay = new DateTime(2023, 4, 26, 22, 58, 11, 160, DateTimeKind.Local).AddTicks(2507),
                             CreatedBy = "GOD",
-                            CreatedOn = new DateTime(2023, 4, 23, 3, 8, 40, 457, DateTimeKind.Local).AddTicks(3477),
+                            CreatedOn = new DateTime(2023, 4, 26, 22, 58, 11, 160, DateTimeKind.Local).AddTicks(2519),
                             Gender = 2,
                             Login = "admin",
                             Name = "Админ",

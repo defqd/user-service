@@ -17,7 +17,7 @@ namespace UserWebAPI.Dto
         /// <summary>
         /// Пол пользователя
         /// </summary>
-        [Gender]
+        [Range(0, 2, ErrorMessage = "Поле пол может содержать 0 - Женский, 1 - Мужской, 2 - Неизвестно")]
         public int Gender { get; set; }
         /// <summary>
         /// Дата рождения пользователя

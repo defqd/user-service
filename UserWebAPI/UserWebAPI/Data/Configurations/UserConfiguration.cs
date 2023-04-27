@@ -37,7 +37,7 @@ namespace UserWebAPI.Data.Configurations
 
             builder.Property(e => e.RevokedBy).HasColumnName("RevokedBy");
 
-            builder.HasData( new User
+            builder.HasData(new User
             {
                 Id = Guid.NewGuid(),
                 Login = "admin",
