@@ -83,7 +83,7 @@ namespace UserWebAPI.Data.Repositories
             return result;
         }
         public async Task<GetUserByLoginDto> GetUserByLoginForAdminAsync(string login)
-        {
+        {   
             var user = await _dbContext.User.FirstOrDefaultAsync(x => x.Login == login);
 
             return new GetUserByLoginDto

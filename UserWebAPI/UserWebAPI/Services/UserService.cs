@@ -60,10 +60,12 @@ namespace UserWebAPI.Services
 
         public async Task<GetUserByLoginDto> GetUserAsync(string login)
         {
-            var user = await _userRepository.GetUserByLoginForAdminAsync(login);
+            var existUser = await _userRepository.UserExistsAsync(login);
 
-            if (user == null)
-                throw new ArgumentException("Пользователя не существует");
+            if (!existUser)
+                throw new ArgumentException("Пользователя с таким логином не существует");
+
+            var user = await _userRepository.GetUserByLoginForAdminAsync(login);
 
             return user;
         }

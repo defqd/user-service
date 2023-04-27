@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using UserWebAPI.Data.Repositories;
 using UserWebAPI.Dto;
 using UserWebAPI.Services;
 
@@ -61,7 +60,7 @@ namespace UserWebAPI.Controllers
             return Ok(user);
         }
         /// <summary>
-        /// Метод для апрос пользователя по токену (для пользователя)
+        /// Метод для запрос пользователя по токену (для пользователя)
         /// </summary>
         /// <returns>Возвращает код 200 и информацию пользователе - если обработка успешна или 500 - если произошла ошибка.</returns>
         [HttpGet("GetUser"), Authorize(Roles = "User")]
